@@ -1,4 +1,4 @@
 package TextExcel;
-public class StringCell {
+public class StringCell extends Cell {
     
 }
