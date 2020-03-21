@@ -12,8 +12,9 @@ public class Spreadsheet {
     
     public Spreadsheet() {
         spreadsheet = new Cell[ROW][COLUMN];
-        for (int i = 0; i < ROW; i++) {
-            for (int j = 0; j < COLUMN; j++) {
+        for (int row = 0; row < ROW; row++) {
+            for (int column = 0; column < COLUMN; column++) {
+              spreadsheet[row][column] = new Cell();
 
             }
         }
@@ -61,7 +62,7 @@ public class Spreadsheet {
                       spreadsheetString += "|";
                   }
 
-                    spreadsheetString += "            ";      //spreadsheet[i][j].toString();
+                    spreadsheetString += spreadsheet[row][column].toString();//"            ";spreadsheet[row][column]; spreadsheet[row][column].toString();     
                     spreadsheetString += "|";
                     
                }

@@ -3,7 +3,7 @@ public class Cell {
     public static int CELL_STRING_WIDTH;
     private String CellString;
     public Cell() {
-        CellString = "empty";
+        CellString = "            ";
 
     }
     public String toString() {
