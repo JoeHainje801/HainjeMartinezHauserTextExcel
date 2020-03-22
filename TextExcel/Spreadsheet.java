@@ -62,7 +62,7 @@ public class Spreadsheet {
                       spreadsheetString += "|";
                   }
 
-                    spreadsheetString += spreadsheet[row][column].toString();//"            ";spreadsheet[row][column]; spreadsheet[row][column].toString();     
+                    spreadsheetString += spreadsheet[row][column].SheetString();//"            ";spreadsheet[row][column]; spreadsheet[row][column].toString();     
                     spreadsheetString += "|";
                     
                }
@@ -76,5 +76,8 @@ public class Spreadsheet {
              }
 
         return spreadsheetString;
+    }
+    public void cellAccess(int row, int column) {
+        System.out.println(this.spreadsheet[row][column].getValue());
     }
 }
