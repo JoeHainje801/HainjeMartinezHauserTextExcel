@@ -39,10 +39,67 @@ public class TextExcelMain {
                 if (parts.length == 2) {
                     if (parts[0].equalsIgnoreCase("clear") && isCell(parts[0])) {
                         // CLEAR CELL COMMAND ----------------------------
+                        System.out.println(0);
 
                     } else {
                         fail = true;
                     }
+                }
+
+
+                if (parts.length > 2) {
+
+                    if (parts.length == 3) {
+                        if (isCell(parts[0]) && parts[1].equalsIgnoreCase("=") && isDouble(parts[2])) {
+                            // SET AS NUMBER CELL ------------------------------
+                            System.out.println(1);
+
+                        } else {
+                            fail = true;
+                        }
+
+                    } else if (isCell(parts[0]) && parts[1].equalsIgnoreCase("=") && isString(parts[2], parts[parts.length - 1]) ) {
+                        // SET AS STRING CELL ------------------------------
+                        System.out.println(2);
+
+
+                    } else if (isCell(parts[0]) && parts[1].equalsIgnoreCase("=") && parts[2].equalsIgnoreCase("(") && parts[parts.length - 1].equalsIgnoreCase(")")) {
+                        // TEST if formula; if so, set as formula cell ---------------------------
+                        System.out.println(3);
+
+                    } else if (parts[0].equalsIgnoreCase("sorta") && parts.length == 4) {
+                        if (isCell(parts[1]) && isCell(parts[3]) && parts[2].equalsIgnoreCase("-")) {
+                            // SORTA COMMAND -----------------------------
+                            System.out.println(4);
+
+                        } else {
+                            fail = true;
+                        }
+
+                    } else if (parts[0].equalsIgnoreCase("sortb") && parts.length == 4) {
+                        if (isCell(parts[1]) && isCell(parts[3]) && parts[2].equalsIgnoreCase("-")) {
+                            // SORTB COMMAND ------------------------------
+                            System.out.println(5);
+
+                        } else {
+                            fail = true;
+                        }
+                        
+                    } else if (parts[0].equalsIgnoreCase("clear") && parts.length == 4) {
+                        if (isCell(parts[1]) && isCell(parts[3]) && parts[2].equalsIgnoreCase("-")) {
+                            // CLEAR RANGE COMMAND ------------------------------
+                            System.out.println(6);
+
+                        } else {
+                            fail = true;
+                        }
+
+                    } else {
+                        fail = true;
+                    }
+
+
+
                 }
 
             }
@@ -78,6 +135,44 @@ public class TextExcelMain {
            fail++;
         }
         if (fail == 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public static boolean isDouble(String input) {
+        int fail = 0;
+        int periods = 0;
+        for (int i = 0; i < input.length(); i++) {
+            if (i == 0) {
+                if ((input.charAt(i) < '0' || input.charAt(i) > '9') && !(input.charAt(i) == '.' || input.charAt(i) == '-')) {
+                    fail++;
+
+                }
+                if (input.charAt(i) == '.') {
+                    periods++;
+                }
+            } else {
+                if ((input.charAt(i) < '0' || input.charAt(i) > '9') && !(input.charAt(i) == '.')) {
+                    fail++;
+                }
+                if (input.charAt(i) == '.') {
+                    periods++;
+                }
+                if (periods > 1) {
+                    fail++;
+                }
+            }
+        }
+        if (fail == 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static boolean isString (String a, String b) {
+        if (a.charAt(0) == '"' && b.charAt(b.length() - 1) == '"') {
             return true;
         } else {
             return false;
