@@ -49,21 +49,40 @@ public class TextExcelMain {
 
                 if (parts.length > 2) {
 
-                    if (parts.length == 3) {
-                        if (isCell(parts[0]) && parts[1].equalsIgnoreCase("=") && isDouble(parts[2])) {
+                   
+                     if (parts.length == 3 && isCell(parts[0]) && parts[1].equalsIgnoreCase("=") && isDouble(parts[2])) {
                             // SET AS NUMBER CELL ------------------------------
+                            theSheet.toNumberCell(parts[0], parts[2]);
                             System.out.println(1);
 
-                        } else {
-                            fail = true;
-                        }
-
-                    } else if (isCell(parts[0]) && parts[1].equalsIgnoreCase("=") && isString(parts[2], parts[parts.length - 1]) ) {
+                        } else if (isCell(parts[0]) && parts[1].equalsIgnoreCase("=") && isString(parts[2], parts[parts.length - 1]) ) {
                         // SET AS STRING CELL ------------------------------
-                        System.out.println(2);
+                          /*if (parts.length == 3) {
+                            theString += parts[2].substring(1, parts[2].length() - 1);
+                          }
+                          if (parts.length > 3) {
+                            if (parts[2].length() > 1) {
+                                theString += parts[2].substring(1);
+
+                            }
+                            if (parts.length >= 5) {
+                                for (int s = 3; s <= (parts.length - 2); s++) {
+                                    theString += " ";
+                                    theString += parts[s];
+                                }
+                            }
+                            if (parts[parts.length - 1].length() > 1) {
+                                theString += " ";
+                                theString += parts[parts.length - 1].substring(0, parts[parts.length - 1].length() - 1);
+
+                            }
+                          } */
+                          String theString = command_input.substring(command_input.indexOf("\"") + 1, command_input.length() - 1);
+                          theSheet.toStringCell(parts[0], theString);
+                          System.out.println(2);
 
 
-                    } else if (isCell(parts[0]) && parts[1].equalsIgnoreCase("=") && parts[2].equalsIgnoreCase("(") && parts[parts.length - 1].equalsIgnoreCase(")")) {
+                        } else if (isCell(parts[0]) && parts[1].equalsIgnoreCase("=") && parts[2].equalsIgnoreCase("(") && parts[parts.length - 1].equalsIgnoreCase(")")) {
                         // TEST if formula; if so, set as formula cell ---------------------------
                         System.out.println(3);
 
@@ -178,5 +197,6 @@ public class TextExcelMain {
             return false;
         }
     }
+    
 
 }

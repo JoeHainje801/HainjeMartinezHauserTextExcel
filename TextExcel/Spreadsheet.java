@@ -80,4 +80,17 @@ public class Spreadsheet {
     public void cellAccess(int row, int column) {
         System.out.println(this.spreadsheet[row][column].getValue());
     }
+    public void toNumberCell(String cell, String d) {
+        int row = Integer.parseInt(cell.substring(1)) - 1;
+        int column = cell.charAt(0) - 'A';
+        spreadsheet[row][column] = new NumberCell();
+        spreadsheet[row][column].setValue(d);
+
+    }
+    public void toStringCell(String cell, String s) {
+        int row = Integer.parseInt(cell.substring(1)) - 1;
+        int column = cell.charAt(0) - 'A';
+        spreadsheet[row][column] = new StringCell();
+        spreadsheet[row][column].setValue(s);
+    }
 }

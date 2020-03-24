@@ -19,13 +19,17 @@ public class Cell {
             }
         }
         if (CellString.length() > 12) {
-            CellString = CellString.substring(0,10) + ">";
+            CellString = CellString.substring(0,11) + ">";
         }
         return CellString;
     }
     
     public String getValue() {
         return this.value;
+
+    }
+    public void setValue(String setVal) {
+        this.value = setVal;
 
     }
 
