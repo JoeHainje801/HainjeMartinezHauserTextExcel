@@ -77,9 +77,11 @@ public class Spreadsheet {
 
         return spreadsheetString;
     }
+
     public void cellAccess(int row, int column) {
         System.out.println(this.spreadsheet[row][column].getValue());
     }
+
     public void toNumberCell(String cell, String d) {
         int row = Integer.parseInt(cell.substring(1)) - 1;
         int column = cell.charAt(0) - 'A';
@@ -87,10 +89,26 @@ public class Spreadsheet {
         spreadsheet[row][column].setValue(d);
 
     }
+
     public void toStringCell(String cell, String s) {
         int row = Integer.parseInt(cell.substring(1)) - 1;
         int column = cell.charAt(0) - 'A';
         spreadsheet[row][column] = new StringCell();
         spreadsheet[row][column].setValue(s);
+    }
+
+    public void sheetClear() {
+        for (int i = 0; i < ROW; i++) {
+            for (int j = 0; j < COLUMN; j++) {
+                spreadsheet[i][j] = new Cell();
+            }
+        }
+    }
+
+    public void cellClear(String cell) {
+        int row = Integer.parseInt(cell.substring(1)) - 1;
+        int column = cell.charAt(0) - 'A';
+        spreadsheet[row][column] = new Cell();
+
     }
 }

@@ -14,6 +14,7 @@ public class TextExcelMain {
             if (command_input.equalsIgnoreCase("print")) {
                 System.out.println(theSheet.toString());
             } else if (command_input.equalsIgnoreCase("clear")) {
+                theSheet.sheetClear();
 
             } else if (command_input.equalsIgnoreCase("quit")) {
                 done = true;
@@ -37,9 +38,9 @@ public class TextExcelMain {
 
 
                 if (parts.length == 2) {
-                    if (parts[0].equalsIgnoreCase("clear") && isCell(parts[0])) {
-                        // CLEAR CELL COMMAND ----------------------------
-                        System.out.println(0);
+                    if (parts[0].equalsIgnoreCase("clear") && isCell(parts[1])) {
+                        theSheet.cellClear(parts[1]);
+                        
 
                     } else {
                         fail = true;
@@ -53,7 +54,7 @@ public class TextExcelMain {
                      if (parts.length == 3 && isCell(parts[0]) && parts[1].equalsIgnoreCase("=") && isDouble(parts[2])) {
                             // SET AS NUMBER CELL ------------------------------
                             theSheet.toNumberCell(parts[0], parts[2]);
-                            System.out.println(1);
+                            
 
                         } else if (isCell(parts[0]) && parts[1].equalsIgnoreCase("=") && isString(parts[2], parts[parts.length - 1]) ) {
                         // SET AS STRING CELL ------------------------------
@@ -79,7 +80,7 @@ public class TextExcelMain {
                           } */
                           String theString = command_input.substring(command_input.indexOf("\"") + 1, command_input.length() - 1);
                           theSheet.toStringCell(parts[0], theString);
-                          System.out.println(2);
+                          
 
 
                         } else if (isCell(parts[0]) && parts[1].equalsIgnoreCase("=") && parts[2].equalsIgnoreCase("(") && parts[parts.length - 1].equalsIgnoreCase(")")) {
