@@ -85,6 +85,10 @@ public class TextExcelMain {
 
                         } else if (isCell(parts[0]) && parts[1].equalsIgnoreCase("=") && parts[2].equalsIgnoreCase("(") && parts[parts.length - 1].equalsIgnoreCase(")")) {
                         // TEST if formula; if so, set as formula cell ---------------------------
+                        String formula = command_input.substring(command_input.indexOf("("));
+                        if (testIfFormula(formula)) {
+
+                        }
                         System.out.println(3);
 
                     } else if (parts[0].equalsIgnoreCase("sorta") && parts.length == 4) {
@@ -99,6 +103,7 @@ public class TextExcelMain {
                     } else if (parts[0].equalsIgnoreCase("sortb") && parts.length == 4) {
                         if (isCell(parts[1]) && isCell(parts[3]) && parts[2].equalsIgnoreCase("-")) {
                             // SORTB COMMAND ------------------------------
+                            
                             System.out.println(5);
 
                         } else {
@@ -197,6 +202,37 @@ public class TextExcelMain {
         } else {
             return false;
         }
+    }
+
+    public static boolean testIfFormula(String formula) {
+        int fail = 0;
+        String[]formulaParts = formula.split(" ");
+        for (int i = 1; i <= (formulaParts.length - 1); i++) {
+            if (formulaParts[1].equalsIgnoreCase("avg") || formulaParts[1].equalsIgnoreCase("sum")) {
+
+
+            } else {
+
+
+            }
+            
+        }
+
+
+        if (fail > 0) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
+    public static void sorta(String cellStart, String cellEnd) {
+
+    }
+
+    public static void sortb(String cellStart, String cellEnd) {
+         
     }
     
 
