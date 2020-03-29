@@ -85,16 +85,18 @@ public class TextExcelMain {
 
                         } else if (isCell(parts[0]) && parts[1].equalsIgnoreCase("=") && parts[2].equalsIgnoreCase("(") && parts[parts.length - 1].equalsIgnoreCase(")")) {
                         // TEST if formula; if so, set as formula cell ---------------------------
-                        String formula = command_input.substring(command_input.indexOf("("));
-                        if (testIfFormula(formula)) {
+                           String formula = command_input.substring(command_input.indexOf("("));
+                           if (testIfFormula(formula)) {
 
-                        }
-                        System.out.println(3);
+                            } else {
+                            fail = true;
+                             }
+                       
 
                     } else if (parts[0].equalsIgnoreCase("sorta") && parts.length == 4) {
                         if (isCell(parts[1]) && isCell(parts[3]) && parts[2].equalsIgnoreCase("-")) {
                             // SORTA COMMAND -----------------------------
-                            System.out.println(4);
+                            
 
                         } else {
                             fail = true;
@@ -104,7 +106,7 @@ public class TextExcelMain {
                         if (isCell(parts[1]) && isCell(parts[3]) && parts[2].equalsIgnoreCase("-")) {
                             // SORTB COMMAND ------------------------------
                             
-                            System.out.println(5);
+                            
 
                         } else {
                             fail = true;
