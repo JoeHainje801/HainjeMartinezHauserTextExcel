@@ -14,7 +14,6 @@ public class FormulaCell extends Cell {
         return tokens != null;
     }
 
-
     public Object evaluate() {
         ArrayList<Object> tokens = parseTokens(getValue());
         // TODO: Do the math.
@@ -27,7 +26,7 @@ public class FormulaCell extends Cell {
      * 
      * @return
      */
-    private static ArrayList<Object> parseTokens(String formula) {
+    public static ArrayList<Object> parseTokens(String formula) {
         ArrayList<Object> tokens = null;
         Scanner formulaScanner = new Scanner(formula);
         if (formulaScanner.next().equals("(")) {
@@ -42,7 +41,7 @@ public class FormulaCell extends Cell {
         }
         formulaScanner.close();
         return tokens;
-        //( 1 + 1 )
+        // ( 1 + 1 )
     }
 
     private static Object nextToken(Scanner formulaScanner) {
@@ -50,8 +49,7 @@ public class FormulaCell extends Cell {
             return formulaScanner.nextDouble();
         }
         String token = formulaScanner.next();
-        if (token.equals("+") || token.equals("-") || token.equals("/")
-                || token.equals("*")) {
+        if (token.equals("+") || token.equals("-") || token.equals("/") || token.equals("*")) {
             return token;
         }
         if (token.equals("avg") || token.equals("sum")) {
@@ -63,6 +61,46 @@ public class FormulaCell extends Cell {
         // TODO: Add conditions for cell references
         assert false;
         return null;
+    }
+
+    public static double calculate(ArrayList<Object> tokens) {
+        double result = 0;
+        for (int i = 1; i < tokens.size(); i++) {
+            while (i <= 2) {
+                if (tokens.get(i).equals("+")) {
+                    result = result + (double)tokens.get(i - 1) + (double)tokens.get(i + 1);
+                }
+                if (tokens.get(i).equals("-")) {
+                    result = result + (double)tokens.get(i - 1) - (double)tokens.get(i + 1); 
+                }
+                if (tokens.get(i).equals("/")) {
+                    result = result + (double)tokens.get(i - 1) / (double)tokens.get(i + 1); 
+                }
+                if (tokens.get(i).equals("*")) {
+                    result = result + (double)tokens.get(i - 1) * (double)tokens.get(i + 1); 
+                }
+                i++;
+            }
+            while (i > 2 && i < tokens.size()) {
+                if (tokens.get(i).equals(")")) {
+                    break;
+                }
+                if (tokens.get(i).equals("+")) {
+                    result = result + (double)tokens.get(i + 1);
+                }
+                if (tokens.get(i).equals("-")) {
+                    result = result - (double)tokens.get(i + 1); 
+                }
+                if (tokens.get(i).equals("/")) {
+                    result = result / (double)tokens.get(i + 1); 
+                }
+                if (tokens.get(i).equals("*")) {
+                    result = result * (double)tokens.get(i + 1); 
+                }
+                i++;
+            }
+        }
+        return result;
     }
 
     // TODO
@@ -85,6 +123,7 @@ public class FormulaCell extends Cell {
         // assert Objects.equals(tokens.get(2), 1);
         // System.out.println("SUCCESS");
         System.out.println(tokens);
+        System.out.println(calculate(tokens));
         inScanner.close();
     }
 }
