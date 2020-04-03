@@ -14,6 +14,7 @@ public class NumberCell extends Cell {
         return this.stringNum;
 
     }
+
     public String SheetString() {
         String sheetstringN = this.stringNum;
         for (int i = CELL_STRING_WIDTH; i > 0; i--) {

@@ -95,8 +95,7 @@ public class TextExcelMain {
 
                     } else if (parts[0].equalsIgnoreCase("sorta") && parts.length == 4) {
                         if (isCell(parts[1]) && isCell(parts[3]) && parts[2].equalsIgnoreCase("-")) {
-                            // SORTA COMMAND -----------------------------
-                            
+                            theSheet.sorta(parts[1], parts[3]);
 
                         } else {
                             fail = true;
@@ -105,6 +104,7 @@ public class TextExcelMain {
                     } else if (parts[0].equalsIgnoreCase("sortb") && parts.length == 4) {
                         if (isCell(parts[1]) && isCell(parts[3]) && parts[2].equalsIgnoreCase("-")) {
                             // SORTB COMMAND ------------------------------
+                            theSheet.sortb(parts[1], parts[3]);
                             
                             
 
@@ -115,7 +115,7 @@ public class TextExcelMain {
                     } else if (parts[0].equalsIgnoreCase("clear") && parts.length == 4) {
                         if (isCell(parts[1]) && isCell(parts[3]) && parts[2].equalsIgnoreCase("-")) {
                             // CLEAR RANGE COMMAND ------------------------------
-                            System.out.println(6);
+                            
 
                         } else {
                             fail = true;
@@ -229,13 +229,7 @@ public class TextExcelMain {
 
     }
 
-    public static void sorta(String cellStart, String cellEnd) {
-
-    }
-
-    public static void sortb(String cellStart, String cellEnd) {
-         
-    }
+   
     
 
 }

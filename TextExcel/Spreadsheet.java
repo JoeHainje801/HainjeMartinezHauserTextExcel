@@ -1,4 +1,5 @@
 package TextExcel;
+import java.util.Arrays;
 public class Spreadsheet {
 
     public static int ROW = 10;
@@ -110,5 +111,76 @@ public class Spreadsheet {
         int column = cell.charAt(0) - 'A';
         spreadsheet[row][column] = new Cell();
 
+    }
+
+    public void sorta(String cellStart, String cellEnd) {
+        if (cellStart.charAt(0) == cellEnd.charAt(0) && !(cellStart.substring(1).equalsIgnoreCase(cellEnd.substring(1))) ) {
+            int column = cellStart.charAt(0) - 'A';
+            int rowStart = Integer.parseInt(cellStart.substring(1)) - 1;
+            int rowEnd = Integer.parseInt(cellEnd.substring(1));
+            double dubArray[] = new double[rowEnd-rowStart];
+            for (int i = rowStart; i < rowEnd; i++) {
+                dubArray[i-rowStart] = Double.parseDouble(spreadsheet[i][column].getValue());
+                
+            }
+            Arrays.sort(dubArray);
+            for (int i = rowStart; i < rowEnd; i++) {
+                spreadsheet[i][column].setValue("" + dubArray[i-rowStart]);
+                
+            }
+
+        } else if (cellStart.substring(1).equalsIgnoreCase(cellEnd.substring(1)) && !(cellStart.charAt(0) == cellEnd.charAt(0)) ) {
+            int row = Integer.parseInt(cellStart.substring(1)) - 1;
+            int colStart = cellStart.charAt(0) - 'A';
+            int colEnd = cellEnd.charAt(0) - 'A' + 1;
+            double dubArray[] = new double[colEnd-colStart];
+            for (int i = colStart; i < colEnd; i++) {
+                dubArray[i-colStart] = Double.parseDouble(spreadsheet[row][i].getValue());
+                
+            }
+            Arrays.sort(dubArray);
+            for (int i = colStart; i < colEnd; i++) {
+                spreadsheet[row][i].setValue("" + dubArray[i-colStart]);
+                
+            }
+
+        }
+
+    }
+
+    public void sortb(String cellStart, String cellEnd) {
+        if (cellStart.charAt(0) == cellEnd.charAt(0) && !(cellStart.substring(1).equalsIgnoreCase(cellEnd.substring(1))) ) {
+            int column = cellStart.charAt(0) - 'A';
+            int rowStart = Integer.parseInt(cellStart.substring(1)) - 1;
+            int rowEnd = Integer.parseInt(cellEnd.substring(1)) - 1;
+            double dubArray[] = new double[rowEnd-rowStart+1];
+            for (int i = rowStart; i <= rowEnd; i++ ) {
+                dubArray[i-rowStart] = Double.parseDouble(spreadsheet[i][column].getValue());
+                
+            }
+            Arrays.sort(dubArray);
+            for (int i = rowEnd; i >= rowStart; i--) {
+                spreadsheet[rowStart + rowEnd - i][column].setValue("" + dubArray[i-rowStart]);
+                
+            }
+
+        } else if (cellStart.substring(1).equalsIgnoreCase(cellEnd.substring(1)) && !(cellStart.charAt(0) == cellEnd.charAt(0)) ) {
+            int row = Integer.parseInt(cellStart.substring(1)) - 1;
+            int colStart = cellStart.charAt(0) - 'A';
+            int colEnd = cellEnd.charAt(0) - 'A';
+            double dubArray[] = new double[colEnd-colStart+1];
+            for (int i = colStart; i <= colEnd; i++) {
+                dubArray[i-colStart] = Double.parseDouble(spreadsheet[row][i].getValue());
+                
+            }
+            Arrays.sort(dubArray);
+            for (int i = colEnd; i >= colStart; i--) {
+                spreadsheet[colStart + colEnd - i][i].setValue("" + dubArray[i-colStart]);
+                
+            }
+
+        }
+
+         
     }
 }

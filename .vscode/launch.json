@@ -6,10 +6,17 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CodeLens (Launch) - TextExcelMain",
+            "request": "launch",
+            "mainClass": "TextExcel.TextExcelMain",
+            "projectName": "MartinezHainje_3c7915c6"
+        },
+        {
+            "type": "java",
             "name": "CodeLens (Launch) - FormulaCell",
             "request": "launch",
             "mainClass": "TextExcel.FormulaCell",
-            "projectName": "MartinezHainje_6e80e551",
+            "projectName": "MartinezHainje_6e80e551"
         },
         {
             "type": "java",
