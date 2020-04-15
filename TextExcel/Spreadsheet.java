@@ -112,6 +112,19 @@ public class Spreadsheet {
         spreadsheet[row][column] = new Cell();
 
     }
+    public void clearCells(String cellStart, String cellEnd) {
+        int columnS = cellStart.charAt(0) - 'A';
+        int rowS = Integer.parseInt(cellStart.substring(1)) - 1;
+        int columnE = cellEnd.charAt(0) - 'A';
+        int rowE = Integer.parseInt(cellEnd.substring(1)) - 1;
+        for (int i = rowS; i <= rowE; i++) {
+            for (int j = columnS; j <= columnE; j++) {
+                spreadsheet[i][j] = new Cell();
+            }
+        }
+
+
+    }
 
     public void sorta(String cellStart, String cellEnd) {
         if (cellStart.charAt(0) == cellEnd.charAt(0) && !(cellStart.substring(1).equalsIgnoreCase(cellEnd.substring(1))) ) {

@@ -58,26 +58,7 @@ public class TextExcelMain {
 
                         } else if (isCell(parts[0]) && parts[1].equalsIgnoreCase("=") && isString(parts[2], parts[parts.length - 1]) ) {
                         // SET AS STRING CELL ------------------------------
-                          /*if (parts.length == 3) {
-                            theString += parts[2].substring(1, parts[2].length() - 1);
-                          }
-                          if (parts.length > 3) {
-                            if (parts[2].length() > 1) {
-                                theString += parts[2].substring(1);
-
-                            }
-                            if (parts.length >= 5) {
-                                for (int s = 3; s <= (parts.length - 2); s++) {
-                                    theString += " ";
-                                    theString += parts[s];
-                                }
-                            }
-                            if (parts[parts.length - 1].length() > 1) {
-                                theString += " ";
-                                theString += parts[parts.length - 1].substring(0, parts[parts.length - 1].length() - 1);
-
-                            }
-                          } */
+                        
                           String theString = command_input.substring(command_input.indexOf("\"") + 1, command_input.length() - 1);
                           theSheet.toStringCell(parts[0], theString);
                           
@@ -90,6 +71,7 @@ public class TextExcelMain {
 
                             } else {
                             fail = true;
+                           
                              }
                        
 
@@ -114,7 +96,7 @@ public class TextExcelMain {
                         
                     } else if (parts[0].equalsIgnoreCase("clear") && parts.length == 4) {
                         if (isCell(parts[1]) && isCell(parts[3]) && parts[2].equalsIgnoreCase("-")) {
-                            // CLEAR RANGE COMMAND ------------------------------
+                            theSheet.clearCells(parts[1], parts[3]);
                             
 
                         } else {
@@ -209,11 +191,31 @@ public class TextExcelMain {
     public static boolean testIfFormula(String formula) {
         int fail = 0;
         String[]formulaParts = formula.split(" ");
-        for (int i = 1; i <= (formulaParts.length - 1); i++) {
+        for (int i = 1; i < (formulaParts.length - 1); i++) {
             if (formulaParts[1].equalsIgnoreCase("avg") || formulaParts[1].equalsIgnoreCase("sum")) {
+                if (isCell(formulaParts[2]) && isCell(formulaParts[4]) && formulaParts[3].equalsIgnoreCase("-")) {
+
+                } else {
+                    fail++;
+                }
 
 
             } else {
+                if (i%2==0) {
+                    if (formulaParts[i].equalsIgnoreCase("-") || formulaParts[i].equalsIgnoreCase("+") || formulaParts[i].equalsIgnoreCase("*") || formulaParts[i].equalsIgnoreCase("/")) {
+
+                    } else {
+                        fail++;
+                    }
+
+                }
+                if (i%2==1) {
+                    if (isCell(formulaParts[i]) || isDouble(formulaParts[i])) {
+
+                    } else {
+                        fail++;
+                    }
+                }
 
 
             }
@@ -221,8 +223,9 @@ public class TextExcelMain {
         }
 
 
-        if (fail > 0) {
+        if (fail == 0) {
             return true;
+            
         } else {
             return false;
         }
