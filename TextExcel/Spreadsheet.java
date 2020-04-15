@@ -196,4 +196,11 @@ public class Spreadsheet {
 
          
     }
+    public void toFormulaCell(String cell, String formula) {
+        int row = Integer.parseInt(cell.substring(1)) - 1;
+        int column = cell.charAt(0) - 'A';
+        spreadsheet[row][column] = new FormulaCell();
+        // spreadsheet[row][column].setValue();
+
+    }
 }
