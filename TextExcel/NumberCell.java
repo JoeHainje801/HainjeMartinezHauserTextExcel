@@ -9,10 +9,10 @@ public class NumberCell extends Cell {
         double val = Double.parseDouble(setVal);
         this.valueNum = val;
         this.stringNum = "" + this.valueNum;
-    }
-    public String getValue() {
+    }public String getValue() {
         return this.stringNum;
 
+    
     }
 
     public String SheetString() {

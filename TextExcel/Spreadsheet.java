@@ -1,5 +1,6 @@
 package TextExcel;
 import java.util.Arrays;
+import java.util.ArrayList;
 public class Spreadsheet {
 
     public static int ROW = 10;
@@ -151,6 +152,7 @@ public class Spreadsheet {
                 dubArray[i-colStart] = Double.parseDouble(spreadsheet[row][i].getValue());
                 
             }
+            //Have to write a sort, cannot use Array.sort
             Arrays.sort(dubArray);
             for (int i = colStart; i < colEnd; i++) {
                 spreadsheet[row][i].setValue("" + dubArray[i-colStart]);
@@ -200,7 +202,11 @@ public class Spreadsheet {
         int row = Integer.parseInt(cell.substring(1)) - 1;
         int column = cell.charAt(0) - 'A';
         spreadsheet[row][column] = new FormulaCell();
-        // spreadsheet[row][column].setValue();
+        //spreadsheet[row][column].getValue();
 
+    }
+
+    public ArrayList<Double> getAllReferences(String formula) {
+        return null;
     }
 }

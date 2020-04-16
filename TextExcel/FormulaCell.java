@@ -63,10 +63,21 @@ public class FormulaCell extends Cell {
         return null;
     }
 
-    public static double calculate(ArrayList<Object> tokens) {
+    /*public static ArrayList<Double> getValues(ArrayList<Object> tokens) {
+        ArrayList<Double> numbers = new ArrayList<Double>();
+        for (int i = 0; i < tokens.size(); i++) {
+            if (tokens.get(i) instanceof Double) {
+                numbers.add((Double)tokens.get(i));
+            }
+        }
+        return numbers;
+    }*/
+
+    public static double basicCalculate(ArrayList<Object> tokens) {
         double result = 0;
+        //loop for usual mathematical operations
         for (int i = 1; i < tokens.size(); i++) {
-            while (i <= 2) {
+            while (i <= 2) {             
                 if (tokens.get(i).equals("+")) {
                     result = result + (double)tokens.get(i - 1) + (double)tokens.get(i + 1);
                 }
@@ -103,6 +114,24 @@ public class FormulaCell extends Cell {
         return result;
     }
 
+    public static double calcAvg(ArrayList<Double> numbers) {
+        double result = 0;
+        for (int j = 0; j < numbers.size(); j++){
+            result = result + numbers.get(j);
+        }
+        result = result / numbers.size();
+        return result;
+
+    }
+
+    public static double calcSum(ArrayList<Double> numbers) {
+        double result = 0;
+        for (int i = 0; i < numbers.size(); i++) {
+            result = result + numbers.get(i);
+        }
+        return result;
+    }
+
     // TODO
 
     /**
@@ -114,6 +143,12 @@ public class FormulaCell extends Cell {
         // FormulaCell cell = new FormulaCell();
         System.out.println("Enter the mathematical expression with correct delimiters");
         Scanner inScanner = new Scanner(System.in);
+        if (avgTest(inScanner) == true) {
+            calcAvg(inScanner);
+        }
+        if (sumTest(inScanner) == true) {
+            calcSum(inScanner);
+        }
         // cell.setValue(inScanner.nextLine());
         // cell.setValue("( 1 + 1 )");
         ArrayList<Object> tokens = parseTokens(inScanner.nextLine());
@@ -123,7 +158,7 @@ public class FormulaCell extends Cell {
         // assert Objects.equals(tokens.get(2), 1);
         // System.out.println("SUCCESS");
         System.out.println(tokens);
-        System.out.println(calculate(tokens));
+        System.out.println(calcSum(getValues(tokens)));
         inScanner.close();
     }
 }
