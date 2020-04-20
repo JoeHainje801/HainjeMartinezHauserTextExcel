@@ -99,6 +99,13 @@ public class Spreadsheet {
         spreadsheet[row][column].setValue(s);
     }
 
+    public void toFormulaCell(String cell, String formula) {
+        int row = Integer.parseInt(cell.substring(1)) - 1;
+        int column = cell.charAt(0) - 'A';
+        spreadsheet[row][column] = new FormulaCell();
+        spreadsheet[row][column].setValue(formula);
+    }
+
     public void sheetClear() {
         for (int i = 0; i < ROW; i++) {
             for (int j = 0; j < COLUMN; j++) {
@@ -198,14 +205,6 @@ public class Spreadsheet {
 
          
     }
-    public void toFormulaCell(String cell, String formula) {
-        int row = Integer.parseInt(cell.substring(1)) - 1;
-        int column = cell.charAt(0) - 'A';
-        spreadsheet[row][column] = new FormulaCell();
-        //spreadsheet[row][column].getValue();
-
-    }
-
     public ArrayList<Double> getAllReferences(String formula) {
         return null;
     }

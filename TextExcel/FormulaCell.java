@@ -1,7 +1,6 @@
 package TextExcel;
 
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.Scanner;
 
 public class FormulaCell extends Cell {
@@ -75,6 +74,9 @@ public class FormulaCell extends Cell {
 
     public static double basicCalculate(ArrayList<Object> tokens) {
         double result = 0;
+        if (tokens.size() == 1) {
+            result = (Double)tokens.get(0);
+        }
         //loop for usual mathematical operations
         for (int i = 1; i < tokens.size(); i++) {
             while (i <= 2) {             
@@ -132,33 +134,24 @@ public class FormulaCell extends Cell {
         return result;
     }
 
-    // TODO
+    public double getCalculatedValue() {
+        String formula = this.getValue();
+        return basicCalculate(parseTokens(formula));
+    }
 
-    /**
-     * A test for formula cell
-     * 
-     * @param args
-     */
-    public static void main(String[] args) {
-        // FormulaCell cell = new FormulaCell();
-        System.out.println("Enter the mathematical expression with correct delimiters");
-        Scanner inScanner = new Scanner(System.in);
-        if (avgTest(inScanner) == true) {
-            calcAvg(inScanner);
+    public static void test() {
+        testFormulaWorks("( 1 )", 1.0);
+        testFormulaWorks("( 1 + 2 )", 3.0);
+    }
+
+    private static void testFormulaWorks(String text, double expectedValue) {
+        FormulaCell cell = new FormulaCell();
+        cell.setValue(text);
+        double actualValue = cell.getCalculatedValue();
+        if (actualValue != expectedValue) {
+            throw new RuntimeException(String.format(
+                "Expected %f, got %f", expectedValue, actualValue
+            ));
         }
-        if (sumTest(inScanner) == true) {
-            calcSum(inScanner);
-        }
-        // cell.setValue(inScanner.nextLine());
-        // cell.setValue("( 1 + 1 )");
-        ArrayList<Object> tokens = parseTokens(inScanner.nextLine());
-        // assert tokens.size() == 3 : "sizes should be same";
-        // assert Objects.equals(tokens.get(0), 1) : "first token should be 1";
-        // assert Objects.equals(tokens.get(1), "+");
-        // assert Objects.equals(tokens.get(2), 1);
-        // System.out.println("SUCCESS");
-        System.out.println(tokens);
-        System.out.println(calcSum(getValues(tokens)));
-        inScanner.close();
     }
 }

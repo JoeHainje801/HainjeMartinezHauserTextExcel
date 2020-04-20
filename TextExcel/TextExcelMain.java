@@ -11,6 +11,7 @@ public class TextExcelMain {
             String command_input = inputScanner.nextLine();
             fail = false;
            
+            //checks for commands
             if (command_input.equalsIgnoreCase("print")) {
                 System.out.println(theSheet.toString());
             } else if (command_input.equalsIgnoreCase("clear")) {
@@ -19,11 +20,15 @@ public class TextExcelMain {
             } else if (command_input.equalsIgnoreCase("quit")) {
                 done = true;
                 inputScanner.close();
+            } else if (command_input.equalsIgnoreCase("test")) {
+                FormulaCell.test();
+                System.out.println("Test Pass");
             } else {
 
-
+                //parse the input
                 String[]parts = command_input.split(" ");
 
+                //checks for and outputs the value of a single cell
                 if (parts.length == 1) {
                     if (isCell(parts[0])) {
                        int column = parts[0].charAt(0) - 'A';
@@ -36,7 +41,7 @@ public class TextExcelMain {
 
                 }
 
-
+                //clears a specified cell
                 if (parts.length == 2) {
                     if (parts[0].equalsIgnoreCase("clear") && isCell(parts[1])) {
                         theSheet.cellClear(parts[1]);
@@ -47,7 +52,7 @@ public class TextExcelMain {
                     }
                 }
 
-
+                //checks for specific type of cell inputed
                 if (parts.length > 2) {
 
                    
@@ -63,7 +68,7 @@ public class TextExcelMain {
                           theSheet.toStringCell(parts[0], theString);
                           
 
-
+                        //Dont take off parentheses for input value, only for display value
                         } else if (isCell(parts[0]) && parts[1].equalsIgnoreCase("=") && parts[2].equalsIgnoreCase("(") && parts[parts.length - 1].equalsIgnoreCase(")")) {
                         // TEST if formula; if so, set as formula cell ---------------------------
                            String formula = command_input.substring(command_input.indexOf("("));
@@ -202,7 +207,7 @@ public class TextExcelMain {
 
 
             } else {
-                if (i%2==0) {
+                if (i % 2 == 0) {
                     if (formulaParts[i].equalsIgnoreCase("-") || formulaParts[i].equalsIgnoreCase("+") || formulaParts[i].equalsIgnoreCase("*") || formulaParts[i].equalsIgnoreCase("/")) {
 
                     } else {
