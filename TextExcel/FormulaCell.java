@@ -66,12 +66,7 @@ public class FormulaCell extends Cell {
     public static double basicCalculate(Spreadsheet spreadsheet, ArrayList<Object> tokens) {
         double result = 0;
         if (tokens.size() == 1) {
-            Object token = tokens.get(0);
-            if (token instanceof Double) {
-                result = (Double)token;
-            } else {
-                result = spreadsheet.getNumberValue((String)token);
-            }
+            result = getTokenNumValue(spreadsheet, tokens.get(0));
         }
         //loop for usual mathematical operations
         for (int i = 1; i < tokens.size(); i++) {
@@ -112,6 +107,14 @@ public class FormulaCell extends Cell {
         return result;
     }
 
+    private static double getTokenNumValue(Spreadsheet spreadsheet, Object token) {
+        if (token instanceof Double) {
+            return (Double)token;
+        } else {
+            return spreadsheet.getNumberValue((String)token);
+        }
+    }
+
     public static double calcAvg(ArrayList<Double> numbers) {
         double result = 0;
         for (int j = 0; j < numbers.size(); j++){
@@ -142,6 +145,7 @@ public class FormulaCell extends Cell {
         testFormulaWorks(spreadsheet, "( 1 + 2 )", 3.0);
         testFormulaWorks(spreadsheet, "( 1 * 2 + 3 / 5 - 1 )", 0.0);
         testFormulaWorks(spreadsheet, "( B1 )", 3.0);
+        testFormulaWorks(spreadsheet, "( B1 + 1 )", 4.0);
     }
 
     private static void testFormulaWorks(Spreadsheet spreadsheet, String text, double expectedValue) {
