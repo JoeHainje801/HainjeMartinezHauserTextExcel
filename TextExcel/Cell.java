@@ -26,7 +26,10 @@ public class Cell {
     
     public String getValue() {
         return this.value;
+    }
 
+    public Double getNumberValue(Spreadsheet spreadsheet) {
+        return null;
     }
     public void setValue(String setVal) {
         this.value = setVal;

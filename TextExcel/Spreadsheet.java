@@ -208,4 +208,10 @@ public class Spreadsheet {
     public ArrayList<Double> getAllReferences(String formula) {
         return null;
     }
+
+    public Double getNumberValue(String cell) {
+        int row = Integer.parseInt(cell.substring(1)) - 1;
+        int col = cell.charAt(0) - 'A';
+        return spreadsheet[row][col].getNumberValue(this);
+    }
 }

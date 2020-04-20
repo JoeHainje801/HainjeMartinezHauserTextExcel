@@ -13,13 +13,6 @@ public class FormulaCell extends Cell {
         return tokens != null;
     }
 
-    public Object evaluate() {
-        ArrayList<Object> tokens = parseTokens(getValue());
-        // TODO: Do the math.
-        // double result = doTheMath(tokens);
-        return 0;
-    }
-
     /**
      * Returns an array list of tokens for the formula from setValue
      * 
@@ -57,9 +50,7 @@ public class FormulaCell extends Cell {
         if (token.equals(")")) {
             return null;
         }
-        // TODO: Add conditions for cell references
-        assert false;
-        return null;
+        return token;
     }
 
     /*public static ArrayList<Double> getValues(ArrayList<Object> tokens) {
@@ -72,10 +63,15 @@ public class FormulaCell extends Cell {
         return numbers;
     }*/
 
-    public static double basicCalculate(ArrayList<Object> tokens) {
+    public static double basicCalculate(Spreadsheet spreadsheet, ArrayList<Object> tokens) {
         double result = 0;
         if (tokens.size() == 1) {
-            result = (Double)tokens.get(0);
+            Object token = tokens.get(0);
+            if (token instanceof Double) {
+                result = (Double)token;
+            } else {
+                result = spreadsheet.getNumberValue((String)token);
+            }
         }
         //loop for usual mathematical operations
         for (int i = 1; i < tokens.size(); i++) {
@@ -134,20 +130,24 @@ public class FormulaCell extends Cell {
         return result;
     }
 
-    public double getCalculatedValue() {
+    public Double getNumberValue(Spreadsheet spreadsheet) {
         String formula = this.getValue();
-        return basicCalculate(parseTokens(formula));
+        return basicCalculate(spreadsheet, parseTokens(formula));
     }
 
     public static void test() {
-        testFormulaWorks("( 1 )", 1.0);
-        testFormulaWorks("( 1 + 2 )", 3.0);
+        Spreadsheet spreadsheet = new Spreadsheet();
+        spreadsheet.toNumberCell("B1", "3");
+        testFormulaWorks(spreadsheet, "( 1 )", 1.0);
+        testFormulaWorks(spreadsheet, "( 1 + 2 )", 3.0);
+        testFormulaWorks(spreadsheet, "( 1 * 2 + 3 / 5 - 1 )", 0.0);
+        testFormulaWorks(spreadsheet, "( B1 )", 3.0);
     }
 
-    private static void testFormulaWorks(String text, double expectedValue) {
+    private static void testFormulaWorks(Spreadsheet spreadsheet, String text, double expectedValue) {
         FormulaCell cell = new FormulaCell();
         cell.setValue(text);
-        double actualValue = cell.getCalculatedValue();
+        double actualValue = cell.getNumberValue(spreadsheet);
         if (actualValue != expectedValue) {
             throw new RuntimeException(String.format(
                 "Expected %f, got %f", expectedValue, actualValue
