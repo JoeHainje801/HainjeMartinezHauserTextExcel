@@ -53,85 +53,93 @@ public class FormulaCell extends Cell {
         return token;
     }
 
-    /*public static ArrayList<Double> getValues(ArrayList<Object> tokens) {
-        ArrayList<Double> numbers = new ArrayList<Double>();
-        for (int i = 0; i < tokens.size(); i++) {
-            if (tokens.get(i) instanceof Double) {
-                numbers.add((Double)tokens.get(i));
-            }
-        }
-        return numbers;
-    }*/
+    /*
+     * public static ArrayList<Double> getValues(ArrayList<Object> tokens) {
+     * ArrayList<Double> numbers = new ArrayList<Double>(); for (int i = 0; i <
+     * tokens.size(); i++) { if (tokens.get(i) instanceof Double) {
+     * numbers.add((Double)tokens.get(i)); } } return numbers; }
+     */
 
     public static double basicCalculate(Spreadsheet spreadsheet, ArrayList<Object> tokens) {
-        double result = 0;
-        if (tokens.size() == 1) {
-            result = getTokenNumValue(spreadsheet, tokens.get(0));
+        if (tokens.get(0).equals("sum")) {
+            return calcSum((String) tokens.get(1), (String) tokens.get(3));
+        } else if (tokens.get(0).equals("avg")) {
+            return calcAvg((String) tokens.get(1), (String) tokens.get(3));
         }
-        //loop for usual mathematical operations
+        double result = getTokenNumValue(spreadsheet, tokens.get(0));
+        boolean expectOperator = true;
         for (int i = 1; i < tokens.size(); i++) {
-            while (i <= 2) {             
-                if (tokens.get(i).equals("+")) {
-                    result = result + (double)tokens.get(i - 1) + (double)tokens.get(i + 1);
+            if (expectOperator) {
+                expectOperator = false;
+            } else {
+                double rightValue = getTokenNumValue(spreadsheet, tokens.get(i));
+                Object operator = tokens.get(i - 1);
+                if (operator.equals("+")) {
+                    result += rightValue;
+                } else if (operator.equals("-")) {
+                    result -= rightValue;
+                } else if (operator.equals("*")) {
+                    result *= rightValue;
+                } else if (operator.equals("/")) {
+                    result /= rightValue;
                 }
-                if (tokens.get(i).equals("-")) {
-                    result = result + (double)tokens.get(i - 1) - (double)tokens.get(i + 1); 
-                }
-                if (tokens.get(i).equals("/")) {
-                    result = result + (double)tokens.get(i - 1) / (double)tokens.get(i + 1); 
-                }
-                if (tokens.get(i).equals("*")) {
-                    result = result + (double)tokens.get(i - 1) * (double)tokens.get(i + 1); 
-                }
-                i++;
+                expectOperator = true;
             }
-            while (i > 2 && i < tokens.size()) {
-                if (tokens.get(i).equals(")")) {
-                    break;
-                }
-                if (tokens.get(i).equals("+")) {
-                    result = result + (double)tokens.get(i + 1);
-                }
-                if (tokens.get(i).equals("-")) {
-                    result = result - (double)tokens.get(i + 1); 
-                }
-                if (tokens.get(i).equals("/")) {
-                    result = result / (double)tokens.get(i + 1); 
-                }
-                if (tokens.get(i).equals("*")) {
-                    result = result * (double)tokens.get(i + 1); 
-                }
-                i++;
-            }
+
         }
         return result;
+    }
+
+    /*
+     * if (tokens.size() == 1) { result = getTokenNumValue(spreadsheet,
+     * tokens.get(0)); } // loop for usual mathematical operations for (int i = 1; i
+     * < tokens.size(); i++) { Object operator = tokens.get(i); double rightValue =
+     * getTokenNumValue(spreadsheet, tokens.get(i + 1));
+     * 
+     * while (i <= 2) { double leftValue = getTokenNumValue(spreadsheet,
+     * tokens.get(i - 1)); if (operator.equals("+")) { result = result + leftValue +
+     * rightValue; } else if (operator.equals("-")) { result = result + leftValue -
+     * rightValue; } else if (operator.equals("/")) { result = result + leftValue /
+     * rightValue; } else if (operator.equals("*")) { result = result + leftValue *
+     * rightValue; } i++; } while (i > 2 && i < tokens.size()) { if
+     * (operator.equals(")")) { break; } else if (operator.equals("+")) { result =
+     * result + rightValue; } else if (operator.equals("-")) { result = result -
+     * rightValue; } else if (operator.equals("/")) { result = result / rightValue;
+     * } else if (operator.equals("*")) { result = result * rightValue; } i++; } }
+     * return result;
+     */
     }
 
     private static double getTokenNumValue(Spreadsheet spreadsheet, Object token) {
         if (token instanceof Double) {
-            return (Double)token;
+            return (Double) token;
         } else {
-            return spreadsheet.getNumberValue((String)token);
+            return spreadsheet.getNumberValue((String) token);
         }
     }
 
-    public static double calcAvg(ArrayList<Double> numbers) {
+    public static double calcSum(String startCell, String endCell) {
         double result = 0;
-        for (int j = 0; j < numbers.size(); j++){
-            result = result + numbers.get(j);
-        }
-        result = result / numbers.size();
-        return result;
-
-    }
-
-    public static double calcSum(ArrayList<Double> numbers) {
-        double result = 0;
-        for (int i = 0; i < numbers.size(); i++) {
-            result = result + numbers.get(i);
-        }
         return result;
     }
+
+    public static double calcAvg(String startCell, String endCell) {
+        double result = 0;
+        return result;
+    }
+
+    /*
+     * public static double calcAvg(ArrayList<Double> numbers) { double result = 0;
+     * for (int j = 0; j < numbers.size(); j++) { result = result + numbers.get(j);
+     * } result = result / numbers.size(); return result;
+     * 
+     * }
+     */
+    /*
+     * public static double calcSum(ArrayList<Double> numbers) { double result = 0;
+     * for (int i = 0; i < numbers.size(); i++) { result = result + numbers.get(i);
+     * } return result; }
+     */
 
     public Double getNumberValue(Spreadsheet spreadsheet) {
         String formula = this.getValue();
@@ -140,12 +148,21 @@ public class FormulaCell extends Cell {
 
     public static void test() {
         Spreadsheet spreadsheet = new Spreadsheet();
-        spreadsheet.toNumberCell("B1", "3");
-        testFormulaWorks(spreadsheet, "( 1 )", 1.0);
-        testFormulaWorks(spreadsheet, "( 1 + 2 )", 3.0);
-        testFormulaWorks(spreadsheet, "( 1 * 2 + 3 / 5 - 1 )", 0.0);
-        testFormulaWorks(spreadsheet, "( B1 )", 3.0);
-        testFormulaWorks(spreadsheet, "( B1 + 1 )", 4.0);
+        spreadsheet.toNumberCell("B1", "2");
+        spreadsheet.toNumberCell("B2", "3");
+        spreadsheet.toNumberCell("B3", "4");
+        /*
+         * testFormulaWorks(spreadsheet, "( 1 )", 1.0); testFormulaWorks(spreadsheet,
+         * "( 1 + 2 )", 3.0); testFormulaWorks(spreadsheet, "( 1 * 2 + 3 / 5 - 1 )",
+         * 0.0); testFormulaWorks(spreadsheet, "( B1 )", 2.0);
+         * testFormulaWorks(spreadsheet, "( B1 + 1 )", 3.0);
+         * testFormulaWorks(spreadsheet, "( 1 + B1 )", 3.0);
+         * testFormulaWorks(spreadsheet, "( 1 - B1 )", -1.0);
+         * testFormulaWorks(spreadsheet, "( 1 * B1 )", 2.0);
+         * testFormulaWorks(spreadsheet, "( 1 / B1 )", 0.5);
+         */
+        testFormulaWorks(spreadsheet, "( sum B1 - B3 )", 9.0);
+
     }
 
     private static void testFormulaWorks(Spreadsheet spreadsheet, String text, double expectedValue) {
@@ -153,9 +170,7 @@ public class FormulaCell extends Cell {
         cell.setValue(text);
         double actualValue = cell.getNumberValue(spreadsheet);
         if (actualValue != expectedValue) {
-            throw new RuntimeException(String.format(
-                "Expected %f, got %f", expectedValue, actualValue
-            ));
+            throw new RuntimeException(String.format("Expected %f, got %f", expectedValue, actualValue));
         }
     }
 }
