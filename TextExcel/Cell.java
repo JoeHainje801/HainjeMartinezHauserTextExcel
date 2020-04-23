@@ -8,7 +8,11 @@ public class Cell {
         value = "<empty>";
 
     }
-    public String SheetString() {
+
+    /**
+     * Formats the cell so that values are centered and the size is <= 12
+     */
+    public String SheetString(Spreadsheet spreadsheet) {
         for (int i = CELL_STRING_WIDTH; i > 0; i--) {
             if (CellString.length() < 12) {
                 if (i%2 == 0) {

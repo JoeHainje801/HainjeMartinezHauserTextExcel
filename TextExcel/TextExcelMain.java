@@ -73,7 +73,7 @@ public class TextExcelMain {
                         // TEST if formula; if so, set as formula cell ---------------------------
                            String formula = command_input.substring(command_input.indexOf("("));
                            if (testIfFormula(formula)) {
-                               theSheet.toFormulaCell(parts[0], command_input.substring(command_input.indexOf("(") + 2, command_input.length() - 3));
+                               theSheet.toFormulaCell(parts[0], formula);
 
                             } else {
                             fail = true;

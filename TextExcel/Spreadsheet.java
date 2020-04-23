@@ -11,7 +11,6 @@ public class Spreadsheet {
     public static int SPREADSHEET_WIDTH = (CELL_WIDTH + BORDER_WIDTH) * (COLUMN + 1);
 
     private Cell[][] spreadsheet;
-    private String spreadsheetString;
 
     public Spreadsheet() {
         spreadsheet = new Cell[ROW][COLUMN];
@@ -25,7 +24,8 @@ public class Spreadsheet {
     }
 
     public String toString() {
-        spreadsheetString = "";
+        String spreadsheetString = "";
+        //Adds row of column labels
         for (int xPos = 1; xPos <= SPREADSHEET_WIDTH; xPos++) {
             if ((xPos % (CELL_WIDTH + BORDER_WIDTH) - 6 == 0) && (xPos > CELL_WIDTH + BORDER_WIDTH)) {
 
@@ -40,6 +40,7 @@ public class Spreadsheet {
 
         for (int row = 0; row < ROW; row++) {
             spreadsheetString += "\n";
+            //Adds borders above a row
             for (int f = 1; f <= COLUMN + 1; f++) {
                 for (int k = 1; k <= CELL_WIDTH; k++) {
                     spreadsheetString += "-";
@@ -47,6 +48,7 @@ public class Spreadsheet {
                 spreadsheetString += "+";
             }
             spreadsheetString += "\n";
+            //Adds borders between cells for a whole row
             for (int column = 0; column < COLUMN; column++) {
                 if (column == 0) {
                     String sideCell = "";
@@ -65,7 +67,7 @@ public class Spreadsheet {
                     spreadsheetString += "|";
                 }
 
-                spreadsheetString += spreadsheet[row][column].SheetString();// " ";spreadsheet[row][column];
+                spreadsheetString += spreadsheet[row][column].SheetString(this);// Adds a cells display value to the sheet
                                                                             // spreadsheet[row][column].toString();
                 spreadsheetString += "|";
 

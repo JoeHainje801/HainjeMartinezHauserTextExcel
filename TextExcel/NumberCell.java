@@ -19,7 +19,8 @@ public class NumberCell extends Cell {
         return valueNum;
     }
 
-    public String SheetString() {
+    @Override
+    public String SheetString(Spreadsheet spreadsheet) {
         String sheetstringN = this.stringNum;
         for (int i = CELL_STRING_WIDTH; i > 0; i--) {
             if (sheetstringN.length() < 12) {

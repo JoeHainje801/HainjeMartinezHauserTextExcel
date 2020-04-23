@@ -6,7 +6,8 @@ public class StringCell extends Cell {
 
     }
 
-    public String SheetString() {
+    @Override
+    public String SheetString(Spreadsheet spreadsheet) {
         String CellStrSheet = this.CellStr;
         for (int i = CELL_STRING_WIDTH; i > 0; i--) {
             if (CellStrSheet.length() < 12) {

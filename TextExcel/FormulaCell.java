@@ -160,6 +160,24 @@ public class FormulaCell extends Cell {
         return basicCalculate(spreadsheet, parseTokens(formula));
     }
 
+    @Override //tells to override the super method
+    public String SheetString(Spreadsheet spreadsheet) {
+        String sheetStringF = this.getNumberValue(spreadsheet).toString();
+        for (int i = CELL_STRING_WIDTH; i > 0; i--) {
+            if (sheetStringF.length() < 12) {
+                if (i%2 == 0) {
+                    sheetStringF += " ";
+                } else {
+                    sheetStringF = " " + sheetStringF;
+                }
+            }
+        }
+        if (sheetStringF.length() > 12) {
+            sheetStringF = sheetStringF.substring(0,11) + ">";
+        }
+        return sheetStringF;
+    }
+
     public static void test() {
         Spreadsheet spreadsheet = new Spreadsheet();
         spreadsheet.toNumberCell("A1", "5");
