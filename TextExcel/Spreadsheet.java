@@ -263,7 +263,7 @@ public class Spreadsheet {
         ArrayList<Double> cellsInRange = new ArrayList<>();
         for (int i = startRow; i <= endRow; i++) {
             for (int j = startCol; j <= endCol; j++) {
-                cellsInRange.add(Double.parseDouble(spreadsheet[i][j].getValue()));
+                cellsInRange.add(spreadsheet[i][j].getNumberValue(this));
             }
         }
         return cellsInRange;
