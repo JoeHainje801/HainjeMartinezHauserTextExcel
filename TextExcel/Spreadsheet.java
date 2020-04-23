@@ -1,21 +1,23 @@
 package TextExcel;
+
 import java.util.ArrayList;
+
 public class Spreadsheet {
 
     public static int ROW = 10;
     public static int COLUMN = 7;
     public static int CELL_WIDTH = 12;
-    public static int BORDER_WIDTH = 1; 
-    public static int SPREADSHEET_WIDTH = (CELL_WIDTH + BORDER_WIDTH)*(COLUMN + 1);
+    public static int BORDER_WIDTH = 1;
+    public static int SPREADSHEET_WIDTH = (CELL_WIDTH + BORDER_WIDTH) * (COLUMN + 1);
 
     private Cell[][] spreadsheet;
     private String spreadsheetString;
-    
+
     public Spreadsheet() {
         spreadsheet = new Cell[ROW][COLUMN];
         for (int row = 0; row < ROW; row++) {
             for (int column = 0; column < COLUMN; column++) {
-              spreadsheet[row][column] = new Cell();
+                spreadsheet[row][column] = new Cell();
 
             }
         }
@@ -24,57 +26,58 @@ public class Spreadsheet {
 
     public String toString() {
         spreadsheetString = "";
-        for (int xPos = 1; xPos <= SPREADSHEET_WIDTH; xPos++ ) {
-            if ((xPos % (CELL_WIDTH+BORDER_WIDTH)-6 == 0) && (xPos > CELL_WIDTH+BORDER_WIDTH)) {
+        for (int xPos = 1; xPos <= SPREADSHEET_WIDTH; xPos++) {
+            if ((xPos % (CELL_WIDTH + BORDER_WIDTH) - 6 == 0) && (xPos > CELL_WIDTH + BORDER_WIDTH)) {
 
-                spreadsheetString += (char)((xPos-6) / (CELL_WIDTH+BORDER_WIDTH) + 64);
+                spreadsheetString += (char) ((xPos - 6) / (CELL_WIDTH + BORDER_WIDTH) + 64);
 
-            } else if (xPos % (CELL_WIDTH+BORDER_WIDTH) == 0) {
+            } else if (xPos % (CELL_WIDTH + BORDER_WIDTH) == 0) {
                 spreadsheetString += "|";
             } else {
                 spreadsheetString += " ";
             }
         }
-        
-            for (int row = 0; row < ROW; row++ ) {
-               spreadsheetString += "\n";
-               for (int f = 1; f <= COLUMN+1; f++) {
+
+        for (int row = 0; row < ROW; row++) {
+            spreadsheetString += "\n";
+            for (int f = 1; f <= COLUMN + 1; f++) {
                 for (int k = 1; k <= CELL_WIDTH; k++) {
                     spreadsheetString += "-";
                 }
                 spreadsheetString += "+";
-               }
-               spreadsheetString += "\n";
-               for (int column = 0; column < COLUMN; column++) {
-                  if (column==0) {
+            }
+            spreadsheetString += "\n";
+            for (int column = 0; column < COLUMN; column++) {
+                if (column == 0) {
                     String sideCell = "";
-                    int row_num = row+1;
-                    sideCell += row_num;  
+                    int row_num = row + 1;
+                    sideCell += row_num;
                     for (int s = CELL_WIDTH; s > 0; s--) {
                         if (sideCell.length() < 12) {
-                            if (s%2 == 0) {
+                            if (s % 2 == 0) {
                                 sideCell += " ";
                             } else {
                                 sideCell = " " + sideCell;
                             }
                         }
                     }
-                      spreadsheetString += sideCell;
-                      spreadsheetString += "|";
-                  }
-
-                    spreadsheetString += spreadsheet[row][column].SheetString();//"            ";spreadsheet[row][column]; spreadsheet[row][column].toString();     
+                    spreadsheetString += sideCell;
                     spreadsheetString += "|";
-                    
-               }
-             }
-             spreadsheetString += "\n";
-             for (int f = 1; f <= COLUMN+1; f++) {
-              for (int k = 1; k <= CELL_WIDTH; k++) {
-                  spreadsheetString += "-";
-              }
-              spreadsheetString += "+";
-             }
+                }
+
+                spreadsheetString += spreadsheet[row][column].SheetString();// " ";spreadsheet[row][column];
+                                                                            // spreadsheet[row][column].toString();
+                spreadsheetString += "|";
+
+            }
+        }
+        spreadsheetString += "\n";
+        for (int f = 1; f <= COLUMN + 1; f++) {
+            for (int k = 1; k <= CELL_WIDTH; k++) {
+                spreadsheetString += "-";
+            }
+            spreadsheetString += "+";
+        }
 
         return spreadsheetString;
     }
@@ -119,6 +122,7 @@ public class Spreadsheet {
         spreadsheet[row][column] = new Cell();
 
     }
+
     public void clearCells(String cellStart, String cellEnd) {
         int columnS = cellStart.charAt(0) - 'A';
         int rowS = Integer.parseInt(cellStart.substring(1)) - 1;
@@ -130,39 +134,40 @@ public class Spreadsheet {
             }
         }
 
-
     }
 
     public void sorta(String cellStart, String cellEnd) {
-        if (cellStart.charAt(0) == cellEnd.charAt(0) && !(cellStart.substring(1).equalsIgnoreCase(cellEnd.substring(1))) ) {
+        if (cellStart.charAt(0) == cellEnd.charAt(0)
+                && !(cellStart.substring(1).equalsIgnoreCase(cellEnd.substring(1)))) {
             int column = cellStart.charAt(0) - 'A';
             int rowStart = Integer.parseInt(cellStart.substring(1)) - 1;
             int rowEnd = Integer.parseInt(cellEnd.substring(1));
-            double dubArray[] = new double[rowEnd-rowStart];
+            double dubArray[] = new double[rowEnd - rowStart];
             for (int i = rowStart; i < rowEnd; i++) {
-                dubArray[i-rowStart] = Double.parseDouble(spreadsheet[i][column].getValue());
-                
+                dubArray[i - rowStart] = Double.parseDouble(spreadsheet[i][column].getValue());
+
             }
             sortforA(dubArray, dubArray.length);
             for (int i = rowStart; i < rowEnd; i++) {
-                spreadsheet[i][column].setValue("" + dubArray[i-rowStart]);
-                
+                spreadsheet[i][column].setValue("" + dubArray[i - rowStart]);
+
             }
 
-        } else if (cellStart.substring(1).equalsIgnoreCase(cellEnd.substring(1)) && !(cellStart.charAt(0) == cellEnd.charAt(0)) ) {
+        } else if (cellStart.substring(1).equalsIgnoreCase(cellEnd.substring(1))
+                && !(cellStart.charAt(0) == cellEnd.charAt(0))) {
             int row = Integer.parseInt(cellStart.substring(1)) - 1;
             int colStart = cellStart.charAt(0) - 'A';
             int colEnd = cellEnd.charAt(0) - 'A' + 1;
-            double dubArray[] = new double[colEnd-colStart];
+            double dubArray[] = new double[colEnd - colStart];
             for (int i = colStart; i < colEnd; i++) {
-                dubArray[i-colStart] = Double.parseDouble(spreadsheet[row][i].getValue());
-                
+                dubArray[i - colStart] = Double.parseDouble(spreadsheet[row][i].getValue());
+
             }
-            //Have to write a sort, cannot use Array.sort
+            // Have to write a sort, cannot use Array.sort
             sortforA(dubArray, dubArray.length);
             for (int i = colStart; i < colEnd; i++) {
-                spreadsheet[row][i].setValue("" + dubArray[i-colStart]);
-                
+                spreadsheet[row][i].setValue("" + dubArray[i - colStart]);
+
             }
 
         }
@@ -170,67 +175,73 @@ public class Spreadsheet {
     }
 
     public void sortb(String cellStart, String cellEnd) {
-        if (cellStart.charAt(0) == cellEnd.charAt(0) && !(cellStart.substring(1).equalsIgnoreCase(cellEnd.substring(1))) ) {
+        if (cellStart.charAt(0) == cellEnd.charAt(0)
+                && !(cellStart.substring(1).equalsIgnoreCase(cellEnd.substring(1)))) {
             int column = cellStart.charAt(0) - 'A';
             int rowStart = Integer.parseInt(cellStart.substring(1)) - 1;
             int rowEnd = Integer.parseInt(cellEnd.substring(1));
-            double dubArray[] = new double[rowEnd-rowStart];
+            double dubArray[] = new double[rowEnd - rowStart];
             for (int i = rowStart; i < rowEnd; i++) {
-                dubArray[i-rowStart] = Double.parseDouble(spreadsheet[i][column].getValue());
-                
+                dubArray[i - rowStart] = Double.parseDouble(spreadsheet[i][column].getValue());
+
             }
             sortforD(dubArray, dubArray.length);
-            /*for (int i = rowEnd; i >= rowStart; i--) {
-                spreadsheet[rowStart + rowEnd - i][column].setValue("" + dubArray[i-rowStart]);
-                
-            }*/
+            /*
+             * for (int i = rowEnd; i >= rowStart; i--) { spreadsheet[rowStart + rowEnd -
+             * i][column].setValue("" + dubArray[i-rowStart]);
+             * 
+             * }
+             */
             for (int i = rowStart; i < rowEnd; i++) {
-                spreadsheet[i][column].setValue("" + dubArray[i-rowStart]);
-                
+                spreadsheet[i][column].setValue("" + dubArray[i - rowStart]);
+
             }
 
-        }  else if (cellStart.substring(1).equalsIgnoreCase(cellEnd.substring(1)) && !(cellStart.charAt(0) == cellEnd.charAt(0)) ) {
+        } else if (cellStart.substring(1).equalsIgnoreCase(cellEnd.substring(1))
+                && !(cellStart.charAt(0) == cellEnd.charAt(0))) {
             int row = Integer.parseInt(cellStart.substring(1)) - 1;
             int colStart = cellStart.charAt(0) - 'A';
             int colEnd = cellEnd.charAt(0) - 'A' + 1;
-            double dubArray[] = new double[colEnd-colStart];
+            double dubArray[] = new double[colEnd - colStart];
             for (int i = colStart; i < colEnd; i++) {
-                dubArray[i-colStart] = Double.parseDouble(spreadsheet[row][i].getValue());
-                
+                dubArray[i - colStart] = Double.parseDouble(spreadsheet[row][i].getValue());
+
             }
-            //Have to write a sort, cannot use Array.sort
+            // Have to write a sort, cannot use Array.sort
             sortforD(dubArray, dubArray.length);
             for (int i = colStart; i < colEnd; i++) {
-                spreadsheet[row][i].setValue("" + dubArray[i-colStart]);
-                
+                spreadsheet[row][i].setValue("" + dubArray[i - colStart]);
+
             }
 
         }
 
-         
     }
+
     private static void sortforA(double theArray[], int l) {
-        for (int i = 1; i < l; i++){
-             int j = i;
-             double currentNum = theArray[i];
-             while ((j > 0) && (theArray[j-1] > currentNum)){
-                theArray[j] = theArray[j-1];
-               j--;
-             }
-             theArray[j] = currentNum;
-           }
-       }
+        for (int i = 1; i < l; i++) {
+            int j = i;
+            double currentNum = theArray[i];
+            while ((j > 0) && (theArray[j - 1] > currentNum)) {
+                theArray[j] = theArray[j - 1];
+                j--;
+            }
+            theArray[j] = currentNum;
+        }
+    }
+
     private static void sortforD(double theArray[], int l) {
-        for (int i = 1; i < l; i++){
-             int j = i;
-             double currentNum = theArray[i];
-             while ((j > 0) && (theArray[j-1] < currentNum)){
-                theArray[j] = theArray[j-1];
-               j--;
-             }
-             theArray[j] = currentNum;
-           }
-       }   
+        for (int i = 1; i < l; i++) {
+            int j = i;
+            double currentNum = theArray[i];
+            while ((j > 0) && (theArray[j - 1] < currentNum)) {
+                theArray[j] = theArray[j - 1];
+                j--;
+            }
+            theArray[j] = currentNum;
+        }
+    }
+
     public ArrayList<Double> getAllReferences(String formula) {
         return null;
     }
@@ -239,5 +250,20 @@ public class Spreadsheet {
         int row = Integer.parseInt(cell.substring(1)) - 1;
         int col = cell.charAt(0) - 'A';
         return spreadsheet[row][col].getNumberValue(this);
+    }
+
+    public ArrayList<Double> getCellRange(String startCell, String endCell) {
+        int INDEX_OFFSET = 1;
+        int startCol = startCell.charAt(0) - 'A';
+        int endCol = endCell.charAt(0) - 'A';
+        int startRow = Integer.parseInt(startCell.substring(1)) - INDEX_OFFSET;
+        int endRow = Integer.parseInt(endCell.substring(1)) - INDEX_OFFSET;
+        ArrayList<Double> cellsInRange = new ArrayList<>();
+        for (int i = startRow; i <= endRow; i++) {
+            for (int j = startCol; j <= endCol; j++) {
+                cellsInRange.add(Double.parseDouble(spreadsheet[i][j].getValue()));
+            }
+        }
+        return cellsInRange;
     }
 }

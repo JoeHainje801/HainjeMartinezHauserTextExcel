@@ -1,11 +1,11 @@
 *Consolidate sheetString into one method because they all do the same thing and cell types do not matter in them
-*Operator with number and cell reference: ( 1 + A1 )
-*Function with reference range: ()
-*Average and Sum with cell references: ( sum/avgA1 - B1 )
-*Make sort method
 
 DONE:
 *Make the spreadsheet accept singular number in parentheses: ( 1 )
 *Operator with two numbers: ( 1 + 1 )
 *Multiple operators with multiple numbers: ( 1 + 2 / 3 * 4 - 5 )
 *Single cell reference: A1
+*Operator with number and cell reference: ( 1 + A1 )
+*Function with reference range: ( sum A1 - C1 )
+*Average and Sum with cell references: ( sum/avgA1 - B1 )
+*Make sort method

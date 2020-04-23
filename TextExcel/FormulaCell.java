@@ -60,11 +60,11 @@ public class FormulaCell extends Cell {
      * numbers.add((Double)tokens.get(i)); } } return numbers; }
      */
 
-    public static double basicCalculate(Spreadsheet spreadsheet, ArrayList<Object> tokens) {
+    public double basicCalculate(Spreadsheet spreadsheet, ArrayList<Object> tokens) {
         if (tokens.get(0).equals("sum")) {
-            return calcSum((String) tokens.get(1), (String) tokens.get(3));
+            return calcSum(spreadsheet, (String) tokens.get(1), (String) tokens.get(3));
         } else if (tokens.get(0).equals("avg")) {
-            return calcAvg((String) tokens.get(1), (String) tokens.get(3));
+            return calcAvg(spreadsheet, (String) tokens.get(1), (String) tokens.get(3));
         }
         double result = getTokenNumValue(spreadsheet, tokens.get(0));
         boolean expectOperator = true;
@@ -108,7 +108,6 @@ public class FormulaCell extends Cell {
      * } else if (operator.equals("*")) { result = result * rightValue; } i++; } }
      * return result;
      */
-    }
 
     private static double getTokenNumValue(Spreadsheet spreadsheet, Object token) {
         if (token instanceof Double) {
@@ -118,14 +117,29 @@ public class FormulaCell extends Cell {
         }
     }
 
-    public static double calcSum(String startCell, String endCell) {
+    public double calcSum(Spreadsheet spreadsheet, String startCell, String endCell) {
         double result = 0;
+        ArrayList<Double> values = spreadsheet.getCellRange(startCell, endCell);
+        for (int i = 0; i < values.size(); i++) {
+            result += values.get(i);
+        }
         return result;
     }
 
-    public static double calcAvg(String startCell, String endCell) {
+    /*
+     * private static ArrayList<Double> getNumList(Spreadsheet spreadsheet,
+     * ArrayList<Object> cellsInRange) { ArrayList<Double> numValues = new
+     * ArrayList<>(); for (int i = 0; i < cellsInRange.size(); i++) { Double value =
+     * spreadsheet.getNumberValue((String) cellsInRange.get(i));
+     * numValues.add(value); } return numValues; }
+     */
+    public static double calcAvg(Spreadsheet spreadsheet, String startCell, String endCell) {
         double result = 0;
-        return result;
+        ArrayList<Double> values = spreadsheet.getCellRange(startCell, endCell);
+        for (int i = 0; i < values.size(); i++) {
+            result += values.get(i);
+        }
+        return result / values.size();
     }
 
     /*
@@ -148,20 +162,32 @@ public class FormulaCell extends Cell {
 
     public static void test() {
         Spreadsheet spreadsheet = new Spreadsheet();
+        spreadsheet.toNumberCell("A1", "5");
+        spreadsheet.toNumberCell("A2", "4");
         spreadsheet.toNumberCell("B1", "2");
         spreadsheet.toNumberCell("B2", "3");
         spreadsheet.toNumberCell("B3", "4");
-        /*
-         * testFormulaWorks(spreadsheet, "( 1 )", 1.0); testFormulaWorks(spreadsheet,
-         * "( 1 + 2 )", 3.0); testFormulaWorks(spreadsheet, "( 1 * 2 + 3 / 5 - 1 )",
-         * 0.0); testFormulaWorks(spreadsheet, "( B1 )", 2.0);
-         * testFormulaWorks(spreadsheet, "( B1 + 1 )", 3.0);
-         * testFormulaWorks(spreadsheet, "( 1 + B1 )", 3.0);
-         * testFormulaWorks(spreadsheet, "( 1 - B1 )", -1.0);
-         * testFormulaWorks(spreadsheet, "( 1 * B1 )", 2.0);
-         * testFormulaWorks(spreadsheet, "( 1 / B1 )", 0.5);
-         */
+        spreadsheet.toNumberCell("C1", "2");
+        spreadsheet.toFormulaCell("D1", "( sum A1 - B1 )");
+        spreadsheet.toFormulaCell("D2", "( sum A2 - B2 )");
+
+        testFormulaWorks(spreadsheet, "( sum A1 - B2 )", 14.0);
+        testFormulaWorks(spreadsheet, "( sum A1 - A1 )", 5.0);
+        testFormulaWorks(spreadsheet, "( avg A1 - C1 )", 3.0);
+        testFormulaWorks(spreadsheet, "( avg B1 - B3 )", 3.0);
         testFormulaWorks(spreadsheet, "( sum B1 - B3 )", 9.0);
+        testFormulaWorks(spreadsheet, "( sum A1 - C1 )", 9.0);
+        testFormulaWorks(spreadsheet, "( 1 )", 1.0);
+        testFormulaWorks(spreadsheet, "( 1 + 2 )", 3.0);
+        testFormulaWorks(spreadsheet, "( 1 * 2 + 3 / 5 - 1 )", (0.0));
+        testFormulaWorks(spreadsheet, "( B1 )", 2.0);
+        testFormulaWorks(spreadsheet, "( B1 + 1 )", 3.0);
+        testFormulaWorks(spreadsheet, "( 1 + B1 )", 3.0);
+        testFormulaWorks(spreadsheet, "( 1 - B1 )", -1.0);
+        testFormulaWorks(spreadsheet, "( 1 * B1 )", 2.0);
+        testFormulaWorks(spreadsheet, "( 1 / B1 )", 0.5);
+        testFormulaWorks(spreadsheet, "( D1 + D2 )", 14);
+        testFormulaWorks(spreadsheet, "( sum D1 - D2 )", 14);
 
     }
 
