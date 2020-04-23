@@ -146,7 +146,7 @@ public class Spreadsheet {
             int rowEnd = Integer.parseInt(cellEnd.substring(1));
             double dubArray[] = new double[rowEnd - rowStart];
             for (int i = rowStart; i < rowEnd; i++) {
-                dubArray[i - rowStart] = Double.parseDouble(spreadsheet[i][column].getValue());
+                dubArray[i - rowStart] = spreadsheet[i][column].getNumberValue(this);
 
             }
             sortforA(dubArray, dubArray.length);
@@ -162,7 +162,7 @@ public class Spreadsheet {
             int colEnd = cellEnd.charAt(0) - 'A' + 1;
             double dubArray[] = new double[colEnd - colStart];
             for (int i = colStart; i < colEnd; i++) {
-                dubArray[i - colStart] = Double.parseDouble(spreadsheet[row][i].getValue());
+                dubArray[i - colStart] = spreadsheet[row][i].getNumberValue(this);
 
             }
             // Have to write a sort, cannot use Array.sort
@@ -184,7 +184,7 @@ public class Spreadsheet {
             int rowEnd = Integer.parseInt(cellEnd.substring(1));
             double dubArray[] = new double[rowEnd - rowStart];
             for (int i = rowStart; i < rowEnd; i++) {
-                dubArray[i - rowStart] = Double.parseDouble(spreadsheet[i][column].getValue());
+                dubArray[i - rowStart] = spreadsheet[i][column].getNumberValue(this);
 
             }
             sortforD(dubArray, dubArray.length);
@@ -206,7 +206,7 @@ public class Spreadsheet {
             int colEnd = cellEnd.charAt(0) - 'A' + 1;
             double dubArray[] = new double[colEnd - colStart];
             for (int i = colStart; i < colEnd; i++) {
-                dubArray[i - colStart] = Double.parseDouble(spreadsheet[row][i].getValue());
+                dubArray[i - colStart] = spreadsheet[row][i].getNumberValue(this);
 
             }
             // Have to write a sort, cannot use Array.sort
