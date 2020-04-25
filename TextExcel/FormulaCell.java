@@ -1,9 +1,12 @@
 package TextExcel;
 
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class FormulaCell extends Cell {
+
+    private boolean working = false;
 
     public FormulaCell() {
     }
@@ -60,19 +63,22 @@ public class FormulaCell extends Cell {
      * numbers.add((Double)tokens.get(i)); } } return numbers; }
      */
 
-    public double basicCalculate(Spreadsheet spreadsheet, ArrayList<Object> tokens) {
+    public Double basicCalculate(Spreadsheet spreadsheet, ArrayList<Object> tokens) {
         if (tokens.get(0).equals("sum")) {
             return calcSum(spreadsheet, (String) tokens.get(1), (String) tokens.get(3));
         } else if (tokens.get(0).equals("avg")) {
             return calcAvg(spreadsheet, (String) tokens.get(1), (String) tokens.get(3));
         }
-        double result = getTokenNumValue(spreadsheet, tokens.get(0));
+        Double result = getTokenNumValue(spreadsheet, tokens.get(0));
+        if (result == null) {
+            return null;
+        }
         boolean expectOperator = true;
         for (int i = 1; i < tokens.size(); i++) {
             if (expectOperator) {
                 expectOperator = false;
             } else {
-                double rightValue = getTokenNumValue(spreadsheet, tokens.get(i));
+                Double rightValue = getTokenNumValue(spreadsheet, tokens.get(i));
                 Object operator = tokens.get(i - 1);
                 if (operator.equals("+")) {
                     result += rightValue;
@@ -109,7 +115,7 @@ public class FormulaCell extends Cell {
      * return result;
      */
 
-    private static double getTokenNumValue(Spreadsheet spreadsheet, Object token) {
+    private static Double getTokenNumValue(Spreadsheet spreadsheet, Object token) {
         if (token instanceof Double) {
             return (Double) token;
         } else {
@@ -117,9 +123,12 @@ public class FormulaCell extends Cell {
         }
     }
 
-    public double calcSum(Spreadsheet spreadsheet, String startCell, String endCell) {
+    public Double calcSum(Spreadsheet spreadsheet, String startCell, String endCell) {
         double result = 0;
         ArrayList<Double> values = spreadsheet.getCellRange(startCell, endCell);
+        if (values.contains(null)) {
+            return null;
+        }
         for (int i = 0; i < values.size(); i++) {
             result += values.get(i);
         }
@@ -133,9 +142,12 @@ public class FormulaCell extends Cell {
      * spreadsheet.getNumberValue((String) cellsInRange.get(i));
      * numValues.add(value); } return numValues; }
      */
-    public static double calcAvg(Spreadsheet spreadsheet, String startCell, String endCell) {
-        double result = 0;
+    public static Double calcAvg(Spreadsheet spreadsheet, String startCell, String endCell) {
+        Double result = 0.0;
         ArrayList<Double> values = spreadsheet.getCellRange(startCell, endCell);
+        if (values.contains(null)) {
+            return null;
+        }
         for (int i = 0; i < values.size(); i++) {
             result += values.get(i);
         }
@@ -155,14 +167,28 @@ public class FormulaCell extends Cell {
      * } return result; }
      */
 
+     @Override
     public Double getNumberValue(Spreadsheet spreadsheet) {
+        if (working) {
+            return null;
+        }
+        working = true;
         String formula = this.getValue();
-        return basicCalculate(spreadsheet, parseTokens(formula));
+        Double answer = basicCalculate(spreadsheet, parseTokens(formula));
+        working = false;
+        return answer;
     }
 
     @Override //tells to override the super method
     public String SheetString(Spreadsheet spreadsheet) {
-        String sheetStringF = this.getNumberValue(spreadsheet).toString();
+        Double numberValue = this.getNumberValue(spreadsheet);
+       
+        String sheetStringF;
+        if (numberValue == null) {
+            sheetStringF = "error";
+        } else {
+            sheetStringF = numberValue.toString();
+        }
         for (int i = CELL_STRING_WIDTH; i > 0; i--) {
             if (sheetStringF.length() < 12) {
                 if (i%2 == 0) {
@@ -188,7 +214,11 @@ public class FormulaCell extends Cell {
         spreadsheet.toNumberCell("C1", "2");
         spreadsheet.toFormulaCell("D1", "( sum A1 - B1 )");
         spreadsheet.toFormulaCell("D2", "( sum A2 - B2 )");
+        spreadsheet.toFormulaCell("D3", "( D4 + 3 )");
+        spreadsheet.toFormulaCell("D4", "( D3 )");
 
+        testFormulaWorks(spreadsheet, "( D3 )", null);
+        testFormulaWorks(spreadsheet, "( D3 + D4 + 2 )", null);
         testFormulaWorks(spreadsheet, "( sum A1 - B2 )", 14.0);
         testFormulaWorks(spreadsheet, "( sum A1 - A1 )", 5.0);
         testFormulaWorks(spreadsheet, "( avg A1 - C1 )", 3.0);
@@ -204,16 +234,16 @@ public class FormulaCell extends Cell {
         testFormulaWorks(spreadsheet, "( 1 - B1 )", -1.0);
         testFormulaWorks(spreadsheet, "( 1 * B1 )", 2.0);
         testFormulaWorks(spreadsheet, "( 1 / B1 )", 0.5);
-        testFormulaWorks(spreadsheet, "( D1 + D2 )", 14);
-        testFormulaWorks(spreadsheet, "( sum D1 - D2 )", 14);
+        testFormulaWorks(spreadsheet, "( D1 + D2 )", 14.0);
+        testFormulaWorks(spreadsheet, "( sum D1 - D2 )", 14.0);
 
     }
 
-    private static void testFormulaWorks(Spreadsheet spreadsheet, String text, double expectedValue) {
+    private static void testFormulaWorks(Spreadsheet spreadsheet, String text, Double expectedValue) {
         FormulaCell cell = new FormulaCell();
         cell.setValue(text);
-        double actualValue = cell.getNumberValue(spreadsheet);
-        if (actualValue != expectedValue) {
+        Double actualValue = cell.getNumberValue(spreadsheet);
+        if (!Objects.equals(actualValue, expectedValue)) {
             throw new RuntimeException(String.format("Expected %f, got %f", expectedValue, actualValue));
         }
     }
