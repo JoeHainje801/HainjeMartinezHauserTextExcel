@@ -2,6 +2,8 @@ package TextExcel;
 import java.util.Scanner;
 public class TextExcelMain {
     public static void main(String[] args) {
+        System.out.println("Welcome to Text Excel!");
+        System.out.print("\nEnter a command:");
         Spreadsheet theSheet = new Spreadsheet();
         boolean fail;
        
@@ -18,6 +20,7 @@ public class TextExcelMain {
                 theSheet.sheetClear();
 
             } else if (command_input.equalsIgnoreCase("quit")) {
+                System.out.println("Farewell!");
                 done = true;
                 inputScanner.close();
             } else if (command_input.equalsIgnoreCase("test")) {
@@ -122,11 +125,12 @@ public class TextExcelMain {
 
             if (fail) {
                 System.out.println("Could not compute");
+                System.out.print("Enter a command:");
+            } else if(!done) {
+                System.out.print("Enter a command:");
             }
+
         }
-       
-
-
     }
     public static boolean isCell(String cell) {
         int fail = 0;
